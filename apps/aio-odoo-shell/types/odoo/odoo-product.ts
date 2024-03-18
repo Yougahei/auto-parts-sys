@@ -1,5 +1,3 @@
-import CatalogForm from "../../components/product/category/form/catalog-form";
-
 export interface Product {
     id: number;
     image_1920: boolean|string;
@@ -130,7 +128,7 @@ export interface ProductCatalog {
     id: number;
     name: string;
     reference_code: string;
-    description: boolean | string;
+    description: string;
     component_ids: number[];
     product_component_ids: number[];
     product_alias_ids: number[];

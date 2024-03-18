@@ -43,7 +43,7 @@ export function MainNav() {
                             : "text-foreground/60"
                     )}
                 >
-                    产品分类
+                    产品目录
                 </Link>
                 <Link
                     href="/product"
@@ -54,7 +54,7 @@ export function MainNav() {
                             : "text-foreground/60"
                     )}
                 >
-                    产品
+                    产品库存
                 </Link>
                 <Link
                     href={siteConfig.links.github}
