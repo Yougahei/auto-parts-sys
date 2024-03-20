@@ -1,15 +1,24 @@
+
+
+
 import "@repo/ui/globals.css";
+
+
 
 import { ReactElement, ReactNode } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "@repo/ui/components/ui/toaster";
 
+
+
 import { ThemeProvider } from "../components/layout/providers";
 import { SiteFooter } from "../components/layout/site-footer";
 import { SiteHeader } from "../components/layout/site-header";
+import { TreeProvider } from "../components/static-tree/tree-context";
 import { siteConfig } from "../config/site";
 import { SidebarProvider } from "../hooks/use-sidebar";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,7 +58,7 @@ export const metadata: Metadata = {
         icon: "/favicon.ico",
         shortcut: "/favicon-16x16.png",
         apple: "/apple-touch-icon.png",
-    }
+    },
 };
 
 export default function RootLayout({
@@ -68,7 +77,9 @@ export default function RootLayout({
                 >
                     <div className="relative flex min-h-screen flex-col bg-background">
                         <SiteHeader />
-                        <main className="flex-1">{children}</main>
+                        <TreeProvider>
+                            <main className="flex-1">{children}</main>
+                        </TreeProvider>
                         <SiteFooter />
                     </div>
                     <Toaster />
