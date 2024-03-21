@@ -1,9 +1,11 @@
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@plate-ui/components/plate-ui/button";
+import PlateEditor from "../components/plate-editor";
 
 export default function Page() {
-  return (
-    <main>
-      <Button>Click me</Button>
-    </main>
-  );
+    return (
+        <main>
+            <Button>Click me</Button>
+            <PlateEditor />
+        </main>
+    );
 }
