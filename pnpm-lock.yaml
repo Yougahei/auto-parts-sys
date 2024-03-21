@@ -47,6 +47,36 @@ importers:
 
   apps/aio-odoo-shell:
     dependencies:
+      '@bomdi/codebox':
+        specifier: ^2.0.0
+        version: 2.0.0
+      '@editorjs/delimiter':
+        specifier: ^1.4.0
+        version: 1.4.0
+      '@editorjs/editorjs':
+        specifier: ^2.29.0
+        version: 2.29.0
+      '@editorjs/embed':
+        specifier: ^2.7.0
+        version: 2.7.0
+      '@editorjs/header':
+        specifier: ^2.8.1
+        version: 2.8.1
+      '@editorjs/list':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@editorjs/marker':
+        specifier: ^1.4.0
+        version: 1.4.0
+      '@editorjs/paragraph':
+        specifier: ^2.11.3
+        version: 2.11.3
+      '@editorjs/quote':
+        specifier: ^2.6.0
+        version: 2.6.0
+      '@editorjs/table':
+        specifier: ^2.3.0
+        version: 2.3.0
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.0)
@@ -65,6 +95,12 @@ importers:
       crypto-js:
         specifier: ^4.2.0
         version: 4.2.0
+      editorjs-button:
+        specifier: ^1.0.4
+        version: 1.0.4
+      editorjs-undo:
+        specifier: ^2.0.26
+        version: 2.0.26
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -562,6 +598,10 @@ packages:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
+  /@bomdi/codebox@2.0.0:
+    resolution: {integrity: sha512-t1xjfur4wAWfKsoS+KkeARUVxBM43QwIMVxqEmhEhyCI7ixhFSBtda8FWZ9udk/+SRdM6gXPaxd2/yUQfEuDbA==}
+    dev: false
+
   /@changesets/apply-release-plan@7.0.0:
     resolution: {integrity: sha512-vfi69JR416qC9hWmFGSxj7N6wA5J222XNBmezSVATPWDVPIF7gkd4d8CpbEbXmRWbVrkoli3oerGS6dcL/BGsQ==}
     dependencies:
@@ -745,6 +785,18 @@ packages:
       prettier: 2.8.8
     dev: true
 
+  /@codexteam/icons@0.0.4:
+    resolution: {integrity: sha512-V8N/TY2TGyas4wLrPIFq7bcow68b3gu8DfDt1+rrHPtXxcexadKauRJL6eQgfG7Z0LCrN4boLRawR4S9gjIh/Q==}
+    dev: false
+
+  /@codexteam/icons@0.0.5:
+    resolution: {integrity: sha512-s6H2KXhLz2rgbMZSkRm8dsMJvyUNZsEjxobBEg9ztdrb1B2H3pEzY6iTwI4XUPJWJ3c3qRKwV4TrO3J5jUdoQA==}
+    dev: false
+
+  /@codexteam/icons@0.0.6:
+    resolution: {integrity: sha512-L7Q5PET8PjKcBT5wp7VR+FCjwCi5PUp7rd/XjsgQ0CI5FJz0DphyHGRILMuDUdCW2MQT9NHbVr4QP31vwAkS/A==}
+    dev: false
+
   /@commitlint/cli@18.6.0(@types/node@20.11.6)(typescript@5.3.3):
     resolution: {integrity: sha512-FiH23cr9QG8VdfbmvJJZmdfHGVMCouOOAzoXZ3Cd7czGC52RbycwNt8YCI7SA69pAl+t30vh8LMaO/N+kcel6w==}
     engines: {node: '>=v18'}
@@ -911,6 +963,56 @@ packages:
     dependencies:
       chalk: 4.1.2
     dev: true
+
+  /@editorjs/delimiter@1.4.0:
+    resolution: {integrity: sha512-i1Wm3UQsVisM7Fh9focJ1a4kX2l7IxO3zrEd+GmYoPVaNwxb/63GLNbGfCCGZBuvUyzeUDnc8cdhD1QQGwUZIg==}
+    dependencies:
+      '@codexteam/icons': 0.0.5
+    dev: false
+
+  /@editorjs/editorjs@2.29.0:
+    resolution: {integrity: sha512-w2BVboSHokMBd/cAOZn0UU328o3gSZ8XUvFPA2e9+ciIGKILiRSPB70kkNdmhHkuNS3q2px+vdaIFaywBl7wGA==}
+    dev: false
+
+  /@editorjs/embed@2.7.0:
+    resolution: {integrity: sha512-FieA8YKnqAMX+4Ng6VeusuuuyMg1cX4vADoEKcQVM0LHy2hC17ztNGZh8UHEfrjUwbfJDSr/cPhT0LRGrwTd8g==}
+    dev: false
+
+  /@editorjs/header@2.8.1:
+    resolution: {integrity: sha512-y0HVXRP7m2W617CWo3fsb5HhXmSLaRpb9GzFx0Vkp/HEm9Dz5YO1s8tC7R8JD3MskwoYh7V0hRFQt39io/r6hA==}
+    dependencies:
+      '@codexteam/icons': 0.0.5
+    dev: false
+
+  /@editorjs/list@1.9.0:
+    resolution: {integrity: sha512-BQEvZW4vi0O0dBvGNljiKxiE89vMSHoM2Tu2OzKUndoj7pY9AxqpgCh1qvwIVsJAlG4Lbt/vBFQilnoStMmI6A==}
+    dependencies:
+      '@codexteam/icons': 0.0.4
+    dev: false
+
+  /@editorjs/marker@1.4.0:
+    resolution: {integrity: sha512-5ipEXfL44jTTRzgNp/p/YjMO7jT08S5z4V8qA3FFJTfdhKgQyM3mvP1zpdYKw47ZZpVWMCncvk5Nto3BxihEtg==}
+    dependencies:
+      '@codexteam/icons': 0.0.5
+    dev: false
+
+  /@editorjs/paragraph@2.11.3:
+    resolution: {integrity: sha512-ON72lhvhgWzPrq4VXpHUeut9bsFeJgVATDeL850FVToOwYHKvdsNpfu0VgxEodhkXgzU/IGl4FzdqC2wd3AJUQ==}
+    dependencies:
+      '@codexteam/icons': 0.0.4
+    dev: false
+
+  /@editorjs/quote@2.6.0:
+    resolution: {integrity: sha512-8DiCMBT4n4UDV5bgzvfRH26HmL6YWddGC4+twvjhR+PzX0gwrnY8nFifvro79EeSqxwRtFjjlGnu5I0VTfw5aQ==}
+    dependencies:
+      '@codexteam/icons': 0.0.5
+    dev: false
+
+  /@editorjs/table@2.3.0:
+    resolution: {integrity: sha512-/dKE6A5FkukX/FpvIyQGsewwXglZk8YbXpEp9vkB6Ec4ETLeGJMxObCcYqbXqVod+IU/a1tFH+j3lsD8ASD41g==}
+    dependencies:
+      '@codexteam/icons': 0.0.6
+    dev: false
 
   /@esbuild/aix-ppc64@0.19.12:
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -3931,6 +4033,16 @@ packages:
 
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
+
+  /editorjs-button@1.0.4:
+    resolution: {integrity: sha512-3wn8VrcGgil0gCTrgJNktiYnsC8YdS1TueNOyWr2geZLSUE9KPSVyQpPAduCdVEy+wbWQqrftczENNdLpxDGsQ==}
+    dev: false
+
+  /editorjs-undo@2.0.26:
+    resolution: {integrity: sha512-5WcjSL55K9EIjatRWNv+lLY3crPWlTQ8hk36JU7mvF/8rZPhrExCQS5QPsHmR2KjL1up4CctApz7I4TY0Eug+Q==}
+    dependencies:
+      vanilla-caret-js: 1.1.0
+    dev: false
 
   /electron-to-chromium@1.4.643:
     resolution: {integrity: sha512-QHscvvS7gt155PtoRC0dR2ilhL8E9LHhfTQEq1uD5AL0524rBLAwpAREFH06f87/e45B9XkR6Ki5dbhbCsVEIg==}
@@ -7794,6 +7906,10 @@ packages:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
     dev: true
+
+  /vanilla-caret-js@1.1.0:
+    resolution: {integrity: sha512-vl3R4Xjqb+xnM0gYyg+wcqWGYwKKnkz58Yj29/FQB+w+yP7R8IR1DGoJnDIs05moEZiGlQUTabPMoEtnQNcrpQ==}
+    dev: false
 
   /vite-node@1.2.1(@types/node@20.11.6):
     resolution: {integrity: sha512-fNzHmQUSOY+y30naohBvSW7pPn/xn3Ib/uqm+5wAJQJiqQsU0NBR78XdRJb04l4bOFKjpTWld0XAfkKlrDbySg==}
