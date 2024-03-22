@@ -62,7 +62,7 @@ import {
     ELEMENT_BLOCKQUOTE,
 } from "@udecode/plate-block-quote";
 import {
-    createExitBreakPlugin,
+    createExitBreakPlugin, createSingleLinePlugin,
     createSoftBreakPlugin,
 } from "@udecode/plate-break";
 import { createCaptionPlugin } from "@udecode/plate-caption";
@@ -71,6 +71,9 @@ import {
     ELEMENT_CODE_BLOCK,
     ELEMENT_CODE_LINE,
     ELEMENT_CODE_SYNTAX,
+    isCodeBlockEmpty,
+    isSelectionAtCodeBlockStart,
+    unwrapCodeBlock,
 } from "@udecode/plate-code-block";
 import { createComboboxPlugin } from "@udecode/plate-combobox";
 import {
@@ -80,6 +83,8 @@ import {
 } from "@udecode/plate-comments";
 import {
     createPlugins,
+    isBlockAboveEmpty,
+    isSelectionAtBlockStart,
     Plate,
     PlateLeaf,
     RenderAfterEditable,
@@ -132,12 +137,13 @@ import {
     ELEMENT_MENTION_INPUT,
 } from "@udecode/plate-mention";
 import { createNodeIdPlugin } from "@udecode/plate-node-id";
+import { createNormalizeTypesPlugin, KEY_NORMALIZE_TYPES, withNormalizeTypes } from "@udecode/plate-normalizers";
 import {
     createParagraphPlugin,
     ELEMENT_PARAGRAPH,
 } from "@udecode/plate-paragraph";
 import { createResetNodePlugin } from "@udecode/plate-reset-node";
-import { createDeletePlugin } from "@udecode/plate-select";
+import { createDeletePlugin, createSelectOnBackspacePlugin } from "@udecode/plate-select";
 import { createBlockSelectionPlugin } from "@udecode/plate-selection";
 import { createDeserializeCsvPlugin } from "@udecode/plate-serializer-csv";
 import { createDeserializeDocxPlugin } from "@udecode/plate-serializer-docx";
@@ -154,42 +160,69 @@ import { createTogglePlugin, ELEMENT_TOGGLE } from "@udecode/plate-toggle";
 import { createTrailingBlockPlugin } from "@udecode/plate-trailing-block";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-// import { autoformatRules } from "./editor-rules/autoformat-rules";
+
+import { autoformatRules } from "./editor-rules/autoformat-rules";
+
+const resetBlockTypesCommonRule = {
+    types: [ELEMENT_BLOCKQUOTE, ELEMENT_TODO_LI],
+    defaultType: ELEMENT_PARAGRAPH,
+};
+
+const resetBlockTypesCodeBlockRule = {
+    types: [ELEMENT_CODE_BLOCK],
+    defaultType: ELEMENT_PARAGRAPH,
+    onReset: unwrapCodeBlock,
+};
 
 const plugins = createPlugins(
     [
-        createParagraphPlugin(),
-        createHeadingPlugin(),
-        createBlockquotePlugin(),
-        createCodeBlockPlugin(),
-        createHorizontalRulePlugin(),
+        // Nodes
+        createParagraphPlugin({ enabled: true }),
+        createHeadingPlugin({ enabled: true }),
+        createBlockquotePlugin({ enabled: true }),
+        createCodeBlockPlugin({ enabled: true }),
+        createHorizontalRulePlugin({ enabled: true }),
         createLinkPlugin({
             renderAfterEditable: LinkFloatingToolbar as RenderAfterEditable,
         }),
-        createImagePlugin(),
-        createMediaEmbedPlugin(),
+        createImagePlugin({ enabled: true }),
+        createMediaEmbedPlugin({ enabled: true }),
         createCaptionPlugin({
             options: {
                 pluginKeys: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED],
             },
         }),
-        createMentionPlugin(),
-        createTodoListPlugin(),
-        createExcalidrawPlugin(),
-        createTogglePlugin(),
-        createTablePlugin(),
-        createBoldPlugin(),
-        createItalicPlugin(),
-        createUnderlinePlugin(),
-        createStrikethroughPlugin(),
-        createCodePlugin(),
-        createSubscriptPlugin(),
-        createSuperscriptPlugin(),
-        createFontColorPlugin(),
-        createFontBackgroundColorPlugin(),
-        createFontSizePlugin(),
-        createHighlightPlugin(),
-        createKbdPlugin(),
+        createMentionPlugin({
+            enabled: true,
+            options: {
+                triggerPreviousCharPattern: /^$|^[\s"']$/,
+            },
+        }),
+        createTodoListPlugin({ enabled: true }),
+        createExcalidrawPlugin({ enabled: true }),
+        createTogglePlugin({ enabled: true }),
+        createTablePlugin({
+            enabled: true,
+            options: {
+                // enableMerging: true,
+            },
+        }),
+
+        // Marks
+        createBoldPlugin({ enabled: true }),
+        createItalicPlugin({ enabled: true }),
+        createUnderlinePlugin({ enabled: true }),
+        createStrikethroughPlugin({ enabled: true }),
+        createCodePlugin({ enabled: true }),
+        createSubscriptPlugin({ enabled: true }),
+        createSuperscriptPlugin({ enabled: true }),
+        createFontColorPlugin({ enabled: true }),
+        createFontBackgroundColorPlugin({ enabled: true }),
+        createFontSizePlugin({ enabled: true }),
+        createHighlightPlugin({ enabled: true }),
+        createKbdPlugin({ enabled: true }),
+
+        // Block Style
         createAlignPlugin({
             inject: {
                 props: {
@@ -204,6 +237,7 @@ const plugins = createPlugins(
                     ],
                 },
             },
+            enabled: true,
         }),
         createIndentPlugin({
             inject: {
@@ -222,6 +256,7 @@ const plugins = createPlugins(
                     ],
                 },
             },
+            enabled: true,
         }),
         createIndentListPlugin({
             inject: {
@@ -236,9 +271,11 @@ const plugins = createPlugins(
                         ELEMENT_H6,
                         ELEMENT_BLOCKQUOTE,
                         ELEMENT_CODE_BLOCK,
+                        ELEMENT_TOGGLE,
                     ],
                 },
             },
+            enabled: true,
         }),
         createLineHeightPlugin({
             inject: {
@@ -250,17 +287,22 @@ const plugins = createPlugins(
                         ELEMENT_H1,
                         ELEMENT_H2,
                         ELEMENT_H3,
+                        ELEMENT_H4,
+                        ELEMENT_H5,
+                        ELEMENT_H6,
                     ],
                 },
             },
+            enabled: true,
         }),
+
+        // Functionality
         createAutoformatPlugin({
             options: {
-                rules: [
-                    // ...autoformatRules
-                ],
+                rules: [...autoformatRules],
                 enableUndoOnDelete: true,
             },
+            enabled: true,
         }),
         createBlockSelectionPlugin({
             options: {
@@ -269,13 +311,16 @@ const plugins = createPlugins(
                     bottom: 0,
                 },
             },
+            enabled: true,
         }),
-        createComboboxPlugin(),
+        createComboboxPlugin({ enabled: true }),
         createDndPlugin({
             options: { enableScroller: true },
+            enabled: true,
         }),
         createEmojiPlugin({
             renderAfterEditable: EmojiCombobox,
+            enabled: true,
         }),
         createExitBreakPlugin({
             options: {
@@ -299,16 +344,56 @@ const plugins = createPlugins(
                     },
                 ],
             },
+            enabled: true,
         }),
-        createNodeIdPlugin(),
+        createNodeIdPlugin({ enabled: true }),
+        createNormalizeTypesPlugin({
+            key: KEY_NORMALIZE_TYPES,
+            withOverrides: withNormalizeTypes,
+            options: {
+                rules: [],
+            },
+            enabled: true,
+        }),
         createResetNodePlugin({
             options: {
                 rules: [
-                    // Usage: https://platejs.org/docs/reset-node
+                    {
+                        ...resetBlockTypesCommonRule,
+                        hotkey: "Enter",
+                        predicate: isBlockAboveEmpty,
+                    },
+                    {
+                        ...resetBlockTypesCommonRule,
+                        hotkey: "Backspace",
+                        predicate: isSelectionAtBlockStart,
+                    },
+                    {
+                        ...resetBlockTypesCodeBlockRule,
+                        hotkey: "Enter",
+                        predicate: isCodeBlockEmpty,
+                    },
+                    {
+                        ...resetBlockTypesCodeBlockRule,
+                        hotkey: "Backspace",
+                        predicate: isSelectionAtCodeBlockStart,
+                    },
                 ],
             },
+            enabled: true,
         }),
-        createDeletePlugin(),
+        createSelectOnBackspacePlugin({
+            options: {
+                query: {
+                    allow: [ELEMENT_IMAGE, ELEMENT_HR],
+                },
+            },
+            enabled: true
+        }),
+        createDeletePlugin({ enabled: true }),
+        createSingleLinePlugin({
+            enabled: true,
+        }),
         createSoftBreakPlugin({
             options: {
                 rules: [
@@ -326,15 +411,15 @@ const plugins = createPlugins(
                 ],
             },
         }),
-        createTabbablePlugin(),
+        createTabbablePlugin({ enabled: true }),
         createTrailingBlockPlugin({
             options: { type: ELEMENT_PARAGRAPH },
         }),
-        createCommentsPlugin(),
-        createDeserializeDocxPlugin(),
-        createDeserializeCsvPlugin(),
-        createDeserializeMdPlugin(),
-        createJuicePlugin(),
+        createCommentsPlugin({ enabled: true }),
+        createDeserializeDocxPlugin({ enabled: true }),
+        createDeserializeCsvPlugin({ enabled: true }),
+        createDeserializeMdPlugin({ enabled: true }),
+        createJuicePlugin({ enabled: true }),
     ],
     {
         components: withDraggables(
@@ -373,9 +458,9 @@ const plugins = createPlugins(
                 [MARK_SUBSCRIPT]: withProps(PlateLeaf, { as: "sub" }),
                 [MARK_SUPERSCRIPT]: withProps(PlateLeaf, { as: "sup" }),
                 [MARK_UNDERLINE]: withProps(PlateLeaf, { as: "u" }),
-            }),
+            })
         ),
-    },
+    }
 );
 
 interface PlateEditorProps {
@@ -384,19 +469,20 @@ interface PlateEditorProps {
     onChange?: (value: any) => void;
 }
 
-function PlateEditor({
-    initialValue,
-    value,
-    onChange
-}: PlateEditorProps) {
+function PlateEditor({ initialValue, value, onChange }: PlateEditorProps) {
     return (
         <div className="mt-10 w-4/5 ml-36">
             <TooltipProvider>
                 <DndProvider backend={HTML5Backend}>
                     <CommentsProvider users={{}} myUserId="1">
-                        <Plate plugins={plugins} initialValue={initialValue} value={value} onChange={(value) => {
-                           onChange?.(value)
-                        }}>
+                        <Plate
+                            plugins={plugins}
+                            initialValue={initialValue}
+                            value={value}
+                            onChange={(value) => {
+                                onChange?.(value);
+                            }}
+                        >
                             <FixedToolbar>
                                 <FixedToolbarButtons />
                             </FixedToolbar>

@@ -1,3 +1,4 @@
+import { AutoformatRule } from '@udecode/plate-autoformat';
 import {
     MARK_BOLD,
     MARK_CODE,
@@ -8,9 +9,8 @@ import {
     MARK_UNDERLINE,
 } from '@udecode/plate-basic-marks';
 import { MARK_HIGHLIGHT } from '@udecode/plate-highlight';
-import { MyAutoformatRule } from "./plate-types";
 
-export const autoformatMarks: MyAutoformatRule[] = [
+export const autoformatMarks: AutoformatRule[] = [
     {
         mode: 'mark',
         type: [MARK_BOLD, MARK_ITALIC],

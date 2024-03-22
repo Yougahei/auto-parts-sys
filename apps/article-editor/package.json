@@ -42,6 +42,7 @@
     "@udecode/plate-media": "^31.0.0",
     "@udecode/plate-mention": "^31.0.0",
     "@udecode/plate-node-id": "^31.0.0",
+    "@udecode/plate-normalizers": "^31.0.0",
     "@udecode/plate-paragraph": "^31.0.0",
     "@udecode/plate-reset-node": "^31.0.0",
     "@udecode/plate-select": "^31.0.0",

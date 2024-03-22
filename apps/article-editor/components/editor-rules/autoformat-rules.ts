@@ -1,24 +1,25 @@
-import { autoformatMarks } from "./autoformat-marks";
-import { autoformatBlocks } from "./autoformat-blocks";
 import {
     autoformatArrow,
     autoformatLegal,
     autoformatLegalHtml,
     autoformatMath,
     autoformatPunctuation,
+    AutoformatRule,
     autoformatSmartQuotes,
-} from '@udecode/plate-autoformat';
-import { MyAutoformatRule } from "./plate-types";
-import { autoformatIndentLists } from "./autoformat-indent-lists";
+} from "@udecode/plate-autoformat";
 
-export const autoformatRules = [
+import { autoformatBlocks } from "./autoformat-blocks";
+import { autoformatIndentLists } from "./autoformat-indent-lists";
+import { autoformatMarks } from "./autoformat-marks";
+
+export const autoformatRules: AutoformatRule[] = [
     ...autoformatBlocks,
     ...autoformatIndentLists,
     ...autoformatMarks,
-    ...(autoformatSmartQuotes as MyAutoformatRule[]),
-    ...(autoformatPunctuation as MyAutoformatRule[]),
-    ...(autoformatLegal as MyAutoformatRule[]),
-    ...(autoformatLegalHtml as MyAutoformatRule[]),
-    ...(autoformatArrow as MyAutoformatRule[]),
-    ...(autoformatMath as MyAutoformatRule[]),
+    ...autoformatSmartQuotes,
+    ...autoformatPunctuation,
+    ...autoformatLegal,
+    ...autoformatLegalHtml,
+    ...autoformatArrow,
+    ...autoformatMath,
 ];

@@ -17,7 +17,7 @@ export default function Page() {
             type: "p",
             children: [{ text: "你好，我是林个了檬sdfsdfsdfsdf" }],
         },
-        { type: "paragraph", id: "eq76j", children: [{ text: "ad" }] },
+        { type: "p", id: "eq76j", children: [{ text: "ad" }] },
         {
             type: "p",
             id: "9b8lc",
@@ -29,7 +29,7 @@ export default function Page() {
             id: "by18e",
             children: [{ text: "addd" }],
         },
-        { type: "paragraph", id: "7n2ey", children: [{ text: "wd" }] },
+        { type: "p", id: "7n2ey", children: [{ text: "wd" }] },
         {
             type: "h1",
             children: [{ text: "dddd" }],
