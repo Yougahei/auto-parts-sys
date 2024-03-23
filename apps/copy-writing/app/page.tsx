@@ -1,5 +1,5 @@
-// import { Button } from "@repo/plate-ui/src/components/plate-ui/button";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@repo/plate-ui/src/components/plate-ui/button";
+// import { Button } from "@repo/ui/components/ui/button";
 
 export default function Page() {
     return (
