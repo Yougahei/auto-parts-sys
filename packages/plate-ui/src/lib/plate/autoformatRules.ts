@@ -7,10 +7,10 @@ import {
   autoformatSmartQuotes,
 } from '@udecode/plate-autoformat';
 
-import { autoformatBlocks } from '@/lib/plate/autoformatBlocks';
-import { autoformatIndentLists } from '@/lib/plate/autoformatIndentLists';
-import { autoformatMarks } from '@/lib/plate/autoformatMarks';
-import { MyAutoformatRule } from '@/lib/plate/plate-types';
+import { autoformatBlocks } from '@plate-ui/lib/plate/autoformatBlocks';
+import { autoformatIndentLists } from '@plate-ui/lib/plate/autoformatIndentLists';
+import { autoformatMarks } from '@plate-ui/lib/plate/autoformatMarks';
+import { MyAutoformatRule } from '@plate-ui/lib/plate/plate-types';
 
 export const autoformatRules = [
   ...autoformatBlocks,

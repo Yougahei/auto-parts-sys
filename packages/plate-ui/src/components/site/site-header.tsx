@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
-import { siteConfig } from '@/config/site';
-import { Icons } from '@/components/icons';
-import { buttonVariants } from '@/components/plate-ui/button';
-import { MainNav } from '@/components/site/main-nav';
-import { ThemeToggle } from '@/components/site/theme-toggle';
+import { siteConfig } from '@plate-ui/config/site';
+import { Icons } from '@plate-ui/components/icons';
+import { buttonVariants } from '@plate-ui/components/plate-ui/button';
+import { MainNav } from '@plate-ui/components/site/main-nav';
+import { ThemeToggle } from '@plate-ui/components/site/theme-toggle';
 
 export function SiteHeader() {
   return (

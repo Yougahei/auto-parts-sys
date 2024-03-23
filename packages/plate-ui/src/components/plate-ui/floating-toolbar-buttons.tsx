@@ -8,9 +8,9 @@ import {
 } from '@udecode/plate-basic-marks';
 import { useEditorReadOnly } from '@udecode/plate-common';
 
-import { Icons } from '@/components/icons';
-import { CommentToolbarButton } from '@/components/plate-ui/comment-toolbar-button';
-import { LinkToolbarButton } from '@/components/plate-ui/link-toolbar-button';
+import { Icons } from '@plate-ui/components/icons';
+import { CommentToolbarButton } from '@plate-ui/components/plate-ui/comment-toolbar-button';
+import { LinkToolbarButton } from '@plate-ui/components/plate-ui/link-toolbar-button';
 
 import { MarkToolbarButton } from './mark-toolbar-button';
 import { MoreDropdownMenu } from './more-dropdown-menu';

@@ -8,7 +8,7 @@ import {
   TTodoListItemElement,
 } from '@udecode/plate-list';
 
-import { formatList, preFormat } from '@/lib/plate/autoformatUtils';
+import { formatList, preFormat } from '@plate-ui/lib/plate/autoformatUtils';
 
 export const autoformatLists: AutoformatRule[] = [
   {

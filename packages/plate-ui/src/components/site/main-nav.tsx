@@ -2,9 +2,9 @@ import * as React from 'react';
 import Link from 'next/link';
 import { cn } from '@udecode/cn';
 
-import { NavItem } from '@/types/nav';
-import { siteConfig } from '@/config/site';
-import { Icons } from '@/components/icons';
+import { NavItem } from '@plate-ui/types/nav';
+import { siteConfig } from '@plate-ui/config/site';
+import { Icons } from '@plate-ui/components/icons';
 
 interface MainNavProps {
   items?: NavItem[];

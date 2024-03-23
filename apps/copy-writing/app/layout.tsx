@@ -2,6 +2,9 @@ import "@repo/ui/globals.css";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import {ThemeProvider} from "@repo/plate-ui/src/components/site/theme-provider";
+import {TooltipProvider} from "@repo/plate-ui/src/components/plate-ui/tooltip";
+import {TailwindIndicator} from "@repo/plate-ui/src/components/site/tailwind-indicator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +20,21 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className} suppressHydrationWarning>
+      <ThemeProvider attribute="class" defaultTheme="light">
+        <TooltipProvider
+            disableHoverableContent
+            delayDuration={500}
+            skipDelayDuration={0}
+        >
+          <div className="relative flex min-h-screen flex-col">
+            {/*<SiteHeader />*/}
+            <div className="flex-1">{children}</div>
+          </div>
+          <TailwindIndicator />
+        </TooltipProvider>
+      </ThemeProvider>
+      </body>
     </html>
   );
 }
