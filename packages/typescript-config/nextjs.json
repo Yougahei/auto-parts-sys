@@ -13,13 +13,5 @@
         "allowJs": true,
         "jsx": "preserve",
         "noEmit": true,
-        "paths": {
-            "@ui/*": [
-                "../../packages/ui/src/*"
-            ],
-            "@plate-ui/*": [
-                "../../packages/plate-ui/src/*"
-            ]
-        }
     }
 }

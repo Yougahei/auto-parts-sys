@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "@repo/plate-ui": "workspace:*",
+        "@repo/ui": "workspace:*",
         "@udecode/plate-common": "^31.0.0",
         "next": "latest",
         "react": "^18.2.0",
