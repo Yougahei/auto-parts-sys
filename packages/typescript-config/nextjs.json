@@ -10,7 +10,7 @@
         ],
         "paths": {
             "@plate-ui/*": ["../../packages/plate-ui/src/*"],
-            "@ui": ["../../packages/ui/src"]
+            "@ui/*": ["../../packages/ui/src/*"]
         },
         "module": "ESNext",
         "moduleResolution": "Bundler",

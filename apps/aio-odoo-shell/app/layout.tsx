@@ -18,6 +18,8 @@ import { SiteHeader } from "../components/layout/site-header";
 import { TreeProvider } from "../components/static-tree/tree-context";
 import { siteConfig } from "../config/site";
 import { SidebarProvider } from "../hooks/use-sidebar";
+import {TooltipProvider} from "@plate-ui/components/plate-ui/tooltip";
+import {TailwindIndicator} from "@plate-ui/components/site/tailwind-indicator";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -75,14 +77,21 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <div className="relative flex min-h-screen flex-col bg-background">
-                        <SiteHeader />
-                        <TreeProvider>
-                            <main className="flex-1">{children}</main>
-                        </TreeProvider>
-                        <SiteFooter />
-                    </div>
-                    <Toaster />
+                    <TooltipProvider
+                        disableHoverableContent
+                        delayDuration={500}
+                        skipDelayDuration={0}
+                    >
+                        <div className="relative flex min-h-screen flex-col bg-background">
+                            <SiteHeader />
+                            <TreeProvider>
+                                <main className="flex-1">{children}</main>
+                            </TreeProvider>
+                            <SiteFooter />
+                        </div>
+                        <Toaster />
+                        <TailwindIndicator />
+                    </TooltipProvider>
                 </ThemeProvider>
             </body>
         </html>
