@@ -11,6 +11,7 @@
     "format:check": "turbo format:check",
     "typecheck": "turbo typecheck",
     "ui:add": "pnpm --filter @repo/ui ui:add",
+    "plate-ui:add": "pnpm --filter @repo/plate-ui ui:add",
     "docs:dev": "pnpm --filter docs dev",
     "cli:dev": "pnpm --filter @repo/cli dev",
     "cli:start": "pnpm --filter @repo/cli start",

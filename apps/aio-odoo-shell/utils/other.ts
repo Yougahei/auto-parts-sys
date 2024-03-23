@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js";
+import { BizTreeData, BizTreeDataList, TreeData, TreeDataList } from "../types/tree";
 
 /**
  *加密处理
@@ -48,6 +49,43 @@ const other = {
         return decryption(src, keyWord);
     },
 };
+
+
+export function BizDataToTreeData(dataList: BizTreeDataList): TreeDataList {
+    let map: { [key: string]: TreeData } = {};
+
+    dataList.forEach(item => {
+        map[item.id] = {
+            id: item.id,
+            name: item.name,
+            title: item.name,
+            description: null,
+            children: [],
+            active: true,
+            parent_id: item.parent_id
+        };
+    });
+
+    let roots: TreeDataList = [];
+
+    dataList.forEach((item: BizTreeData) => {
+        if (item.parent_id && map[item.parent_id]) {
+            //@ts-ignore
+            map[item.parent_id].children.push(map[item.id]);
+        } else {
+            //@ts-ignore
+            roots.push(map[item.id]);
+        }
+    });
+
+    Object.values(map).forEach(item => {
+        if (item.children && item.children.length === 0) {
+            delete item.children;
+        }
+    });
+
+    return roots;
+}
 
 // 统一批量导出
 export default other;
