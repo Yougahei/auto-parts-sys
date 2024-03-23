@@ -1,21 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Button } from "@ui/components/ui/button";
 import { getImage } from "../../api/odoo/odoo-api";
-import { userStore } from "../../stores/userInfo";
-import EditTree from "../../components/common/tree/edit-tree";
+import EditTree from "../../components/tree/edit-tree";
+import {TreeDataList} from "../../types/tree";
 import {catalogDemo} from "../../demo-data/catalog-demo";
 
 
 function Page() {
-    const [state, setState] = useState("");
     const [imgUrl, setImgUrl] = useState<string | null>(null);
-    // const baseInfo = userStore((state) => state.baseInfo);
+    const [treeData, setTreeData] = useState<TreeDataList>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        localStorage.setItem("treeData", JSON.stringify(catalogDemo));
+        setTreeData(catalogDemo)
+        setLoading(false);
+    }, []);
+
+    if(loading){
+        return <div>Loading...</div>
+    }
+
     return (
         <div className="mt-5 flex ">
             <div className="w-72">
-                <EditTree treeData={catalogDemo}/>
+                <EditTree treeData={treeData}/>
             </div>
             <div>
                 <Button onClick={async () => {
@@ -33,7 +44,6 @@ function Page() {
                 }}>
                     测试获取头像
                 </Button>
-                <div>{state}</div>
                 {imgUrl? <img src={imgUrl} alt="Avatar" />: null}
             </div>
         </div>

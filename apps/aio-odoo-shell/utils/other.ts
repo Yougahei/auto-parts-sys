@@ -58,8 +58,7 @@ export function BizDataToTreeData(dataList: BizTreeDataList): TreeDataList {
         map[item.id] = {
             id: item.id,
             name: item.name,
-            title: item.name,
-            description: null,
+            article_uuid: item.article_uuid,
             children: [],
             active: true,
             parent_id: item.parent_id

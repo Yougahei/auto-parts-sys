@@ -10,7 +10,7 @@ import {
 } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 
-import { TreeData } from "../../../types/tree";
+import { TreeData } from "../../types/tree";
 
 type NodeComponentProps = NodeRendererProps<TreeData> & {};
 
