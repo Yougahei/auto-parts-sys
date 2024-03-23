@@ -244,3 +244,29 @@ export async function getProductComponents(token: string) {
     );
     return await response.json();
 }
+
+export async function getCopyWriting(token: string) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "copywriting.copywriting",
+            method: "search_read",
+            token: token,
+            args: [],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(
+        `/json-call`,
+        rpcData,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `session_id=${sessionId?.value}`,
+            },
+        }
+    );
+    return await response.json();
+}
