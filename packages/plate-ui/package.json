@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "preview": "next build && next start",
+    "ui:add": "pnpm dlx @udecode/plate-ui@latest add",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
