@@ -5,7 +5,7 @@ import * as ToolbarPrimitive from '@radix-ui/react-toolbar';
 import { cn, withCn, withRef, withVariants } from '@udecode/cn';
 import { cva, VariantProps } from 'class-variance-authority';
 
-import { Icons } from '@plate-ui/components/icons';
+import { Icons } from '@/components/icons';
 
 import { Separator } from './separator';
 import { withTooltip } from './tooltip';
@@ -27,7 +27,7 @@ export const ToolbarLink = withCn(
 
 export const ToolbarSeparator = withCn(
   ToolbarPrimitive.Separator,
-  'my-1 w-px shrink-0 bg-border'
+  'my-1 w-[1px] shrink-0 bg-border'
 );
 
 const toolbarButtonVariants = cva(
