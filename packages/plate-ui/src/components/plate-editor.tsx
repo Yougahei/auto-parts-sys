@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
+import EditorProvider from "@plate-ui/components/editor-provider";
 import { CommentsPopover } from "@plate-ui/components/plate-ui/comments-popover";
 import { CursorOverlay } from "@plate-ui/components/plate-ui/cursor-overlay";
 import { Editor } from "@plate-ui/components/plate-ui/editor";
@@ -31,19 +32,19 @@ interface PLateEditorProps {
     value: EditorValue[];
     onChange: (value: EditorValue[]) => void;
     className?: string;
-};
+}
 
 export default function PlateEditor({
     initialValue,
     value,
     onChange,
-    className
+    className,
 }: PLateEditorProps) {
     const containerRef = useRef(null);
 
     return (
         <div className={className}>
-            <DndProvider backend={HTML5Backend}>
+            <EditorProvider>
                 <CommentsProvider users={commentsUsers} myUserId={myUserId}>
                     <Plate
                         plugins={plugins}
@@ -83,7 +84,7 @@ export default function PlateEditor({
                         </div>
                     </Plate>
                 </CommentsProvider>
-            </DndProvider>
+            </EditorProvider>
         </div>
     );
 }

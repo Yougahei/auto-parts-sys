@@ -12,11 +12,19 @@ import { RxCross2 } from "react-icons/rx";
 
 import { TreeData } from "../../types/tree";
 
-type NodeComponentProps = NodeRendererProps<TreeData> & {};
+type NodeComponentProps = NodeRendererProps<TreeData> & {
+    canRename?: boolean;
+    canDelete?: boolean;
+    showIcon?: boolean;
+    onClick?: (node: any) => void;
+};
 
-const Node = ({ node, style, dragHandle, tree }: NodeComponentProps) => {
+const Node = ({ node, style, dragHandle, tree, canRename=true, canDelete=true, showIcon=true, onClick}: NodeComponentProps) => {
+    //@ts-ignore
     const CustomIcon = node.data.icon;
+    //@ts-ignore
     const iconColor = node.data.iconColor;
+
     const [inputValue, setInputValue] = useState(node.data.name);
 
     return (
@@ -29,17 +37,19 @@ const Node = ({ node, style, dragHandle, tree }: NodeComponentProps) => {
                 onClick={() => node.isInternal}
                 className="flex h-full items-center w-full cursor-pointer"
             >
-                {node.isLeaf ? (
+                {!(node.children && node.children?.length > 0) ? (
                     <div>
                         <span className="w-5 text-lg flex"></span>
                         <span className="mr-1.5 flex items-center text-lg">
-                            {CustomIcon ? (
-                                <CustomIcon
-                                    color={iconColor ? iconColor : "#6bc7f6"}
-                                />
-                            ) : (
-                                <AiFillFile color="#6bc7f6" />
-                            )}
+                            {showIcon? (
+                                CustomIcon ? (
+                                    <CustomIcon
+                                        color={iconColor ? iconColor : "#6bc7f6"}
+                                    />
+                                ) : (
+                                    <AiFillFile color="#6bc7f6" />
+                                )
+                            ): null}
                         </span>
                     </div>
                 ) : (
@@ -55,17 +65,19 @@ const Node = ({ node, style, dragHandle, tree }: NodeComponentProps) => {
                             )}
                         </span>
                         <span className="mr-1.5 flex items-center text-lg">
-                            {CustomIcon ? (
-                                <CustomIcon
-                                    color={iconColor ? iconColor : "#f6cf60"}
-                                />
-                            ) : (
-                                <AiFillFolder color="#f6cf60" />
-                            )}
+                            {showIcon? (
+                                CustomIcon ? (
+                                    <CustomIcon
+                                        color={iconColor ? iconColor : "#f6cf60"}
+                                    />
+                                ) : (
+                                    <AiFillFolder color="#f6cf60" />
+                                )
+                            ): null}
                         </span>
                     </div>
                 )}
-                <span className="text-gray-700 font-semibold">
+                <span className="text-gray-700 font-semibold" onClick={() => onClick?.(node.data)}>
                     {node.isEditing ? (
                         <Input
                             className="w-full h-6 border-1 rounded-md px-1.5 focus:outline-none focus:border-blue-500"
@@ -78,7 +90,7 @@ const Node = ({ node, style, dragHandle, tree }: NodeComponentProps) => {
                             // onBlur={() => node.reset()}
                             onKeyDown={(e: any) => {
                                 if (e.key === "Escape") node.reset();
-                                // if (e.key === "Enter") node.submit(e.currentTarget.value);
+                                if (e.key === "Enter") node.submit(e.currentTarget.value);
                             }}
                             autoFocus
                         />
@@ -95,16 +107,16 @@ const Node = ({ node, style, dragHandle, tree }: NodeComponentProps) => {
                             onClick={() => node.submit(inputValue)}
                             title="Delete"
                         >
-                            <MdOutlineSaveAs />
+                            <MdOutlineSaveAs/>
                         </button>
                     ) : (
-                        <button onClick={() => node.edit()} title="Rename...">
-                            <MdEdit />
-                        </button>
+                        canRename ? <button onClick={() => node.edit()} title="Rename...">
+                            <MdEdit/>
+                        </button> : null
                     )}
-                    <button onClick={() => tree.delete(node.id)} title="Delete">
-                        <RxCross2 />
-                    </button>
+                    {canDelete ? <button onClick={() => tree.delete(node.id)} title="Delete">
+                        <RxCross2/>
+                    </button> : null}
                 </div>
             </div>
         </div>

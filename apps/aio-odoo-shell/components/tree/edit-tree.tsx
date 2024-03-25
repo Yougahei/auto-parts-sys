@@ -1,21 +1,45 @@
 import React, { useRef, useState } from "react";
 import { Button } from "@plate-ui/components/plate-ui/button";
 import { Input } from "@plate-ui/components/plate-ui/input";
-import { Tree, useSimpleTree} from "react-arborist";
+import { Tree, useSimpleTree } from "react-arborist";
 import { AiOutlineFileAdd } from "react-icons/ai";
 import { TbFolderPlus } from "react-icons/tb";
+
+import { TreeDataList } from "../../types/tree";
 import Node from "./node";
-import {TreeDataList} from "../../types/tree";
+
+type Operation = {
+    move?: boolean;
+    rename?: boolean;
+    delete?: boolean;
+    create?: boolean;
+    showIcon?: boolean;
+    canDrag?: boolean;
+};
 
 interface EditTreeProps {
     treeData: TreeDataList;
+    create?: boolean;
+    operation?: Operation;
+    itemClick?: (item: any) => void;
 }
 
-function EditTree({treeData}: EditTreeProps) {
+function EditTree({
+    treeData,
+    create = true,
+    operation = {
+        move: true,
+        rename: true,
+        delete: true,
+        create: true,
+        showIcon: true,
+        canDrag: true,
+    },
+    itemClick
+}: EditTreeProps) {
     const [term, setTerm] = useState("");
     const treeRef = useRef(null);
     const [data, controller] = useSimpleTree(treeData);
-
 
     const createFileFolder = (
         <div className="space-x-1">
@@ -40,7 +64,9 @@ function EditTree({treeData}: EditTreeProps) {
 
     return (
         <div className="ml-2">
-            <div className="folderFileActions">{createFileFolder}</div>
+            {create ? (
+                <div className="folderFileActions">{createFileFolder}</div>
+            ) : null}
             <Input
                 type="text"
                 placeholder="Search..."
@@ -52,19 +78,30 @@ function EditTree({treeData}: EditTreeProps) {
                 ref={treeRef}
                 data={data}
                 width={280}
-                height={800}
+                height={600}
                 indent={24}
                 rowHeight={32}
+                disableDrag={!operation.canDrag}
                 // openByDefault={false}
                 searchTerm={term}
                 searchMatch={(node, term) =>
                     node.data.name.toLowerCase().includes(term.toLowerCase())
                 }
-                {...controller}
+                onMove={operation.move ? controller.onMove : undefined}
+                onCreate={operation.create ? controller.onCreate : undefined}
+                onDelete={operation.delete ? controller.onDelete : undefined}
+                onRename={operation.rename ? controller.onRename : undefined}
             >
-                {(node) => <Node {...node} />}
+                {(node) => (
+                    <Node
+                        {...node}
+                        canRename={operation?.rename}
+                        canDelete={operation?.delete}
+                        showIcon={operation?.showIcon}
+                        onClick={itemClick}
+                    />
+                )}
             </Tree>
-            <div>{JSON.stringify(data)}</div>
         </div>
     );
 }

@@ -1,26 +1,17 @@
-
-
-
 import "@repo/ui/globals.css";
-
-
 
 import { ReactElement, ReactNode } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { TooltipProvider } from "@plate-ui/components/plate-ui/tooltip";
+import { TailwindIndicator } from "@plate-ui/components/site/tailwind-indicator";
 import { Toaster } from "@repo/ui/components/ui/toaster";
-
-
 
 import { ThemeProvider } from "../components/layout/providers";
 import { SiteFooter } from "../components/layout/site-footer";
 import { SiteHeader } from "../components/layout/site-header";
 import { TreeProvider } from "../components/static-tree/tree-context";
 import { siteConfig } from "../config/site";
-import { SidebarProvider } from "../hooks/use-sidebar";
-import {TooltipProvider} from "@plate-ui/components/plate-ui/tooltip";
-import {TailwindIndicator} from "@plate-ui/components/site/tailwind-indicator";
-
 
 const inter = Inter({ subsets: ["latin"] });
 
