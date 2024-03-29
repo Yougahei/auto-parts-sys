@@ -146,7 +146,7 @@ export async function getProductList(token: string) {
     const rpcData: RpcData = {
         jsonrpc: "2.0",
         params: {
-            model: "product.template",
+            model: "pim.product",
             method: "search_read",
             token: token,
             args: [],
@@ -251,6 +251,84 @@ export async function getCopyWriting(token: string) {
         jsonrpc: "2.0",
         params: {
             model: "copywriting.copywriting",
+            method: "search_read",
+            token: token,
+            args: [],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(
+        `/json-call`,
+        rpcData,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `session_id=${sessionId?.value}`,
+            },
+        }
+    );
+    return await response.json();
+}
+
+export async function getPimAttribute(token: string) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.attribute",
+            method: "search_read",
+            token: token,
+            args: [],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(
+        `/json-call`,
+        rpcData,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `session_id=${sessionId?.value}`,
+            },
+        }
+    );
+    return await response.json();
+}
+
+export async function getPimAttributeGroup(token: string) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.attribute_group",
+            method: "search_read",
+            token: token,
+            args: [],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(
+        `/json-call`,
+        rpcData,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `session_id=${sessionId?.value}`,
+            },
+        }
+    );
+    return await response.json();
+}
+
+export async function getPimAttributeTab(token: string) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.attribute_tab",
             method: "search_read",
             token: token,
             args: [],
