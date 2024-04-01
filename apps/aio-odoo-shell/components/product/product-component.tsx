@@ -9,7 +9,12 @@ import {
     ResizablePanelGroup,
 } from "@ui/components/ui/resizable";
 import { Separator } from "@ui/components/ui/separator";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@ui/components/ui/tabs";
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@ui/components/ui/tabs";
 import { TooltipProvider } from "@ui/components/ui/tooltip";
 import { cn } from "@ui/lib/utils";
 
@@ -19,6 +24,7 @@ import { Product, ProductList, ProductStatusEnum } from "../../types/product";
 import { Heading } from "../common/page-tools/heading";
 import ImageKanbanView from "../common/views/image-kanban-view";
 import ProductFilter from "./filter/product-filter";
+import ProductSideInfo from "./product-side-info";
 
 const operateBar = {
     view: true,
@@ -31,6 +37,21 @@ interface ProductComponentProps {
     defaultLayout?: number[];
     defaultCollapsed?: boolean;
     navCollapsedSize: number;
+}
+
+export function product_status(data: ProductStatusEnum) {
+    const badgeStatus = {
+        draft: { color: "bg-red-500", name: "草稿" },
+        prepared: { color: "bg-blue-500", name: "已准备" },
+        reviewed: { color: "bg-yellow-500", name: "审核" },
+        not_ready: { color: "bg-gray-500", name: "未准备" },
+        done: { color: "bg-green-500", name: "完成" },
+    };
+    return (
+        <Badge className={badgeStatus[data].color}>
+            {badgeStatus[data].name}
+        </Badge>
+    );
 }
 
 function ProductComponent({
@@ -58,21 +79,6 @@ function ProductComponent({
 
     if (loading) {
         return <div>loading...</div>;
-    }
-
-    function product_status(data: ProductStatusEnum) {
-        const badgeStatus = {
-            draft: { color: "bg-red-500", name: "草稿" },
-            prepared: { color: "bg-blue-500", name: "已准备" },
-            reviewed: { color: "bg-yellow-500", name: "审核" },
-            not_ready: { color: "bg-gray-500", name: "未准备" },
-            done: { color: "bg-green-500", name: "完成" },
-        };
-        return (
-            <Badge className={badgeStatus[data].color}>
-                {badgeStatus[data].name}
-            </Badge>
-        );
     }
 
     function content(data: Product) {
@@ -110,8 +116,8 @@ function ProductComponent({
                         defaultSize={defaultLayout[0]}
                         collapsedSize={navCollapsedSize}
                         collapsible={true}
-                        minSize={20}
-                        maxSize={20}
+                        minSize={defaultLayout[0]}
+                        maxSize={defaultLayout[0]}
                     >
                         <Tabs defaultValue="filter">
                             <TabsList className="w-full">
@@ -123,8 +129,12 @@ function ProductComponent({
                                 </TabsTrigger>
                             </TabsList>
                             <Separator />
-                            <TabsContent value="filter"><ProductFilter/></TabsContent>
-                            <TabsContent value="views">Change your password here.</TabsContent>
+                            <TabsContent value="filter">
+                                <ProductFilter />
+                            </TabsContent>
+                            <TabsContent value="views">
+                                Change your password here.
+                            </TabsContent>
                         </Tabs>
                     </ResizablePanel>
                     <ResizableHandle disabled />
@@ -146,7 +156,7 @@ function ProductComponent({
                     </ResizablePanel>
                     <ResizableHandle disabled />
                     <ResizablePanel defaultSize={defaultLayout[2]}>
-                        <>内容3</>
+                        <ProductSideInfo/>
                     </ResizablePanel>
                 </ResizablePanelGroup>
             </TooltipProvider>

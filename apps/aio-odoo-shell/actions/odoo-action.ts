@@ -348,3 +348,25 @@ export async function getPimAttributeTab(token: string) {
     );
     return await response.json();
 }
+
+export async function createPimAttribute(token: string, data: any) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.attribute",
+            method: "create",
+            token: token,
+            args: [data],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
+    return await response.json();
+}
