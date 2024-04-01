@@ -22,6 +22,7 @@ export type TreeData = {
     article_uuid: string;
     children?: TreeData[];
     active: boolean;
+    product_list: string[];
 }
 
 export type TreeDataList = TreeData[];

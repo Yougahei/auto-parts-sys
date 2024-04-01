@@ -77,7 +77,7 @@ function EditTree({
             <Tree
                 ref={treeRef}
                 data={data}
-                width={280}
+                width={"full"}
                 height={600}
                 indent={24}
                 rowHeight={32}
@@ -87,6 +87,7 @@ function EditTree({
                 searchMatch={(node, term) =>
                     node.data.name.toLowerCase().includes(term.toLowerCase())
                 }
+                onSelect={(node) => console.log(node)}
                 onMove={operation.move ? controller.onMove : undefined}
                 onCreate={operation.create ? controller.onCreate : undefined}
                 onDelete={operation.delete ? controller.onDelete : undefined}
@@ -102,6 +103,7 @@ function EditTree({
                     />
                 )}
             </Tree>
+            <div>{JSON.stringify(data)}</div>
         </div>
     );
 }

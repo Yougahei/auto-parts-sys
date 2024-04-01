@@ -1,5 +1,7 @@
 "use client";
 
+import "react-datasheet-grid/dist/style.css";
+
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     DynamicDataSheetGrid,
@@ -8,13 +10,15 @@ import {
     textColumn,
 } from "react-datasheet-grid";
 
-import "react-datasheet-grid/dist/style.css";
+import {
+    createPimAttribute,
+    getPimAttribute,
+} from "../../../actions/odoo-action";
+import { Attribute } from "../../../types/attribute";
+import { BaseInfo } from "../../../types/odooStoreType";
+import {Button} from "@ui/components/ui/button";
 
-import { createPimAttribute, getPimAttribute } from "../../actions/odoo-action";
-import { Attribute } from "../../types/attribute";
-import { BaseInfo } from "../../types/odooStoreType";
-
-export default function Datasheet() {
+function ProductTeable() {
     const [data, setData] = useState<Attribute[]>([]);
     const [loading, setLoading] = useState(true);
     const [columns, setColumns] = useState<any[]>([]);
@@ -66,6 +70,7 @@ export default function Datasheet() {
         const response = await getPimAttribute(infoBase.token);
         setData(response.result);
         setLoading(false);
+        console.log("触发")
     }, []);
 
     const newColumns = useMemo(() => {
@@ -76,6 +81,7 @@ export default function Datasheet() {
                 title: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize the key for the title
             }));
         }
+        console.log("column")
         return [];
     }, [data]);
 
@@ -87,20 +93,19 @@ export default function Datasheet() {
         setColumns(newColumns as any[]);
     }, [newColumns]);
 
-    // useEffect(() => {
-    //     console.log("数据情况", createdRowIds.values());
-    // }, [data]);
 
     if (loading) {
         return <div>loading...</div>;
     }
     return (
-        <>
-            <button onClick={commit}>Commit</button>
-
-            <button onClick={cancel}>Cancel</button>
+        <div className="space-y-2 mt-2">
+            <div className="space-x-2">
+                <Button variant="outline" onClick={commit}>Commit</Button>
+                <Button variant="outline" onClick={cancel}>Cancel</Button>
+            </div>
 
             <DynamicDataSheetGrid
+
                 columns={columns}
                 value={data}
                 createRow={() => ({ id: Math.random(), name: "" }) as Attribute}
@@ -173,6 +178,8 @@ export default function Datasheet() {
                     setData(newValue);
                 }}
             />
-        </>
+        </div>
     );
 }
+
+export default ProductTeable;

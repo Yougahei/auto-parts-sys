@@ -77,7 +77,7 @@ const Node = ({ node, style, dragHandle, tree, canRename=true, canDelete=true, s
                         </span>
                     </div>
                 )}
-                <span className="text-gray-700 font-semibold" onClick={() => onClick?.(node.data)}>
+                <span className="text-gray-700 font-semibold" onClick={() => node.isEditing? null: onClick?.(node.data)}>
                     {node.isEditing ? (
                         <Input
                             className="w-full h-6 border-1 rounded-md px-1.5 focus:outline-none focus:border-blue-500"
@@ -114,7 +114,7 @@ const Node = ({ node, style, dragHandle, tree, canRename=true, canDelete=true, s
                             <MdEdit/>
                         </button> : null
                     )}
-                    {canDelete ? <button onClick={() => tree.delete(node.id)} title="Delete">
+                    {!node.isEditing && canDelete ? <button onClick={() => tree.delete(node.id)} title="Delete">
                         <RxCross2/>
                     </button> : null}
                 </div>
