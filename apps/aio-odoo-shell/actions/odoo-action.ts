@@ -343,3 +343,50 @@ export async function createPimAttribute(token: string, data: any) {
     });
     return await response.json();
 }
+
+export async function getPimCatalog(token: string, domain: any[] = [], fields: string[] = []) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.catalog",
+            method: "search_read",
+            token: token,
+            args: [domain, fields],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
+    return await response.json();
+}
+
+export async function savePimCatalogTree(
+    token: string,
+    data: { id: number; tree: any }
+) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.catalog",
+            method: "write",
+            token: token,
+            args: [[data.id], { data: JSON.stringify(data.tree) }],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
+    return await response.json();
+}

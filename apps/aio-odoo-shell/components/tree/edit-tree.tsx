@@ -1,9 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, {ReactNode, useEffect, useRef, useState} from "react";
 import { Button } from "@plate-ui/components/plate-ui/button";
 import { Input } from "@plate-ui/components/plate-ui/input";
 import { Tree, useSimpleTree } from "react-arborist";
 import { AiOutlineFileAdd } from "react-icons/ai";
-import { TbFolderPlus } from "react-icons/tb";
 
 import { TreeDataList } from "../../types/tree";
 import Node from "./node";
@@ -22,6 +21,8 @@ interface EditTreeProps {
     create?: boolean;
     operation?: Operation;
     itemClick?: (item: any) => void;
+    save?: (data: any) => void;
+    toobar?: (data: any) => ReactNode;
 }
 
 function EditTree({
@@ -35,22 +36,30 @@ function EditTree({
         showIcon: true,
         canDrag: true,
     },
-    itemClick
+    itemClick,
+    save,
+    toobar
 }: EditTreeProps) {
     const [term, setTerm] = useState("");
     const treeRef = useRef(null);
     const [data, controller] = useSimpleTree(treeData);
 
+    console.log("树获取的数据", treeData);
+
+    useEffect(() => {
+        save && save(data);
+    }, [data]);
+
     const createFileFolder = (
         <div className="space-x-1">
-            <Button
-                variant="link"
-                // @ts-ignore
-                onClick={() => treeRef.current.createInternal()}
-                title="New Folder..."
-            >
-                <TbFolderPlus />
-            </Button>
+            {/*<Button*/}
+            {/*    variant="link"*/}
+            {/*    // @ts-ignore*/}
+            {/*    onClick={() => treeRef.current.createInternal()}*/}
+            {/*    title="New Folder..."*/}
+            {/*>*/}
+            {/*    <TbFolderPlus />*/}
+            {/*</Button>*/}
             <Button
                 variant="link"
                 // @ts-ignore
@@ -59,11 +68,12 @@ function EditTree({
             >
                 <AiOutlineFileAdd />
             </Button>
+            {toobar? toobar(data): null}
         </div>
     );
 
     return (
-        <div className="ml-2">
+        <div className="ml-2 space-y-2">
             {create ? (
                 <div className="folderFileActions">{createFileFolder}</div>
             ) : null}
@@ -87,7 +97,7 @@ function EditTree({
                 searchMatch={(node, term) =>
                     node.data.name.toLowerCase().includes(term.toLowerCase())
                 }
-                onSelect={(node) => console.log(node)}
+                // onSelect={(node) => console.log(node)}
                 onMove={operation.move ? controller.onMove : undefined}
                 onCreate={operation.create ? controller.onCreate : undefined}
                 onDelete={operation.delete ? controller.onDelete : undefined}
@@ -103,7 +113,7 @@ function EditTree({
                     />
                 )}
             </Tree>
-            <div>{JSON.stringify(data)}</div>
+            {/*<div>{JSON.stringify(data)}</div>*/}
         </div>
     );
 }

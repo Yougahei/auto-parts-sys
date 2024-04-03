@@ -19,10 +19,10 @@ export type TreeData = {
     // iconColor?: string;
     id: string;
     name: string;
-    article_uuid: string;
+    article_uuid?: string;
     children?: TreeData[];
     active: boolean;
-    product_list: string[];
+    product_list?: string[];
 }
 
 export type TreeDataList = TreeData[];
