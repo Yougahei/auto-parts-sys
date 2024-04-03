@@ -1,53 +1,74 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Badge } from "@ui/components/ui/badge";
+import { Input } from "@ui/components/ui/input";
+import {
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+} from "@ui/components/ui/resizable";
+import { Separator } from "@ui/components/ui/separator";
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
 } from "@ui/components/ui/tabs";
+import { TooltipProvider } from "@ui/components/ui/tooltip";
+import { cn } from "@ui/lib/utils";
 
 import { getProductList } from "../../actions/odoo-action";
-import { Product } from "../../types/odoo/odoo-product";
 import { BaseInfo } from "../../types/odooStoreType";
+import { Product, ProductList, ProductStatusEnum } from "../../types/product";
 import { Heading } from "../common/page-tools/heading";
 import ImageKanbanView from "../common/views/image-kanban-view";
-import { Badge } from "@ui/components/ui/badge";
-
-import {
-    Dialog, DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@ui/components/ui/dialog";
-import { Button } from "@ui/components/ui/button";
+import ProductFilter from "./filter/product-filter";
+import ProductSideInfo from "./product-side-info";
 
 const operateBar = {
     view: true,
-    // create: "/product/create",
+    create: "/product/create",
     placeholder: "搜索产品库",
     searchKey: "name",
 };
 
-function ProductComponent() {
-    const router = useRouter();
-    const [dataList, setDataList] = useState<Product[]>([]);
+interface ProductComponentProps {
+    defaultLayout?: number[];
+    defaultCollapsed?: boolean;
+    navCollapsedSize: number;
+}
+
+export function product_status(data: ProductStatusEnum) {
+    const badgeStatus = {
+        draft: { color: "bg-red-500", name: "草稿" },
+        prepared: { color: "bg-blue-500", name: "已准备" },
+        reviewed: { color: "bg-yellow-500", name: "审核" },
+        not_ready: { color: "bg-gray-500", name: "未准备" },
+        done: { color: "bg-green-500", name: "完成" },
+    };
+    return (
+        <Badge className={badgeStatus[data].color}>
+            {badgeStatus[data].name}
+        </Badge>
+    );
+}
+
+function ProductComponent({
+    defaultLayout = [20, 40, 40],
+    navCollapsedSize,
+}: ProductComponentProps) {
+    const [dataList, setDataList] = useState<ProductList>([]);
     const [loading, setLoading] = React.useState(true);
 
-    const handleClick = (data: any) => {
-        router.push(`/product?product_id=${data.id}`);
+    const handleClick = (data: Product) => {
+        // router.push(`/product?product_id=${data.id}`);
     };
 
     async function initData() {
         const storedBaseInfo = sessionStorage.getItem("baseInfo");
         const infoBase: BaseInfo = JSON.parse(storedBaseInfo ?? "{}");
         const data = await getProductList(infoBase.token);
-        // console.log(data.result);
         setDataList(data.result);
         setLoading(false);
     }
@@ -60,66 +81,86 @@ function ProductComponent() {
         return <div>loading...</div>;
     }
 
-    function content(data: any) {
+    function content(data: Product) {
         return (
-            <div>
-                <div>{`SKU: ${data.default_code}`}</div>
-                {/*<div>{`价格：${data.list_price}`}</div>*/}
-                {/*<div>{`在手：${data.qty_available}`}</div>*/}
+            <div className="space-y-0.5">
+                <div>{`SKU: ${data.sku}`}</div>
+                <div>
+                    {`Status：`} {product_status(data.product_status)}
+                </div>
+                <div>
+                    {`Active：`}{" "}
+                    <Badge
+                        className={data.active ? "bg-green-500" : "bg-red-500"}
+                    >
+                        {data.active ? "InUse" : "NotUse"}
+                    </Badge>
+                </div>
             </div>
-        );
-    }
-
-    function footer(data: any) {
-        return (
-            <Dialog>
-                <DialogTrigger>
-                    <Badge >详细</Badge>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>{data.name}</DialogTitle>
-                        <DialogDescription>
-                            <div>
-                                {JSON.stringify(data)}
-                            </div>
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="sm:justify-start">
-                        <DialogClose asChild>
-                            <Button type="button" variant="secondary">
-                                Close
-                            </Button>
-                        </DialogClose>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
         );
     }
 
     return (
-        <Tabs defaultValue="kanban">
-            <div className="flex items-center justify-between">
-                <Heading title={"产品"} description={"产品管理页面"} />
-                <TabsList className="grid grid-cols-2">
-                    <TabsTrigger value="kanban">看板</TabsTrigger>
-                    <TabsTrigger value="table">列表</TabsTrigger>
-                </TabsList>
-            </div>
-            <TabsContent value="kanban" className="w-full">
-                <ImageKanbanView
-                    initDataList={dataList}
-                    operateBar={operateBar}
-                    onClick={() => handleClick}
-                    imageKey="image_128"
-                    content={content}
-                    footer={footer}
-                />
-            </TabsContent>
-            <TabsContent value="table" className="w-full">
-                列表
-            </TabsContent>
-        </Tabs>
+        <div>
+            <TooltipProvider delayDuration={0}>
+                <ResizablePanelGroup
+                    direction="horizontal"
+                    onLayout={(sizes: number[]) => {
+                        document.cookie = `article-resizable-panels:layout=${JSON.stringify(
+                            sizes
+                        )}`;
+                    }}
+                    className="h-full max-h-[800px] items-stretch"
+                >
+                    <ResizablePanel
+                        defaultSize={defaultLayout[0]}
+                        collapsedSize={navCollapsedSize}
+                        collapsible={true}
+                        minSize={defaultLayout[0]}
+                        maxSize={defaultLayout[0]}
+                    >
+                        <Tabs defaultValue="filter">
+                            <TabsList className="w-full">
+                                <TabsTrigger value="filter" className="w-full">
+                                    Filter
+                                </TabsTrigger>
+                                <TabsTrigger value="views" className="w-full">
+                                    Views
+                                </TabsTrigger>
+                            </TabsList>
+                            <Separator />
+                            <TabsContent value="filter">
+                                <ProductFilter />
+                            </TabsContent>
+                            <TabsContent value="views">
+                                Change your password here.
+                            </TabsContent>
+                        </Tabs>
+                    </ResizablePanel>
+                    <ResizableHandle disabled />
+                    <ResizablePanel
+                        defaultSize={defaultLayout[1]}
+                        minSize={defaultLayout[1]}
+                        maxSize={defaultLayout[1]}
+                    >
+                        <div className="flex items-center px-4 py-2 mb-2">
+                            <h1 className="text-xl font-bold">Product Cards</h1>
+                        </div>
+                        <ImageKanbanView
+                            initDataList={dataList}
+                            operateBar={operateBar}
+                            onClick={(data) => handleClick(data)}
+                            // imageKey="image_128"
+                            content={content}
+                        />
+                    </ResizablePanel>
+                    <ResizableHandle disabled />
+                    <ResizablePanel defaultSize={defaultLayout[2]}>
+                        <ProductSideInfo/>
+                    </ResizablePanel>
+                </ResizablePanelGroup>
+            </TooltipProvider>
+        </div>
     );
 }
 

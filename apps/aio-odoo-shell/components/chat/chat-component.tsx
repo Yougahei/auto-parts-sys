@@ -77,21 +77,21 @@ export default function ChatComponent({
             <ResizablePanelGroup
                 direction="horizontal"
                 onLayout={(sizes: number[]) => {
-                    document.cookie = `react-resizable-panels:layout=${JSON.stringify(
+                    document.cookie = `chat-resizable-panels:layout=${JSON.stringify(
                         sizes
                     )}`;
                 }}
                 className="h-full items-stretch"
             >
                 <ResizablePanel
-                    defaultSize={defaultLayout[0]}
+                    defaultSize={15}
                     collapsedSize={navCollapsedSize}
                     collapsible={true}
-                    minSize={13}
-                    maxSize={20}
+                    minSize={15}
+                    maxSize={15}
                     onCollapse={() => {
                         setIsCollapsed(!isCollapsed);
-                        document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
+                        document.cookie = `chat-resizable-panels:collapsed=${JSON.stringify(
                             !isCollapsed
                         )}`;
                     }}
@@ -123,7 +123,7 @@ export default function ChatComponent({
                     </div>
                 </ResizablePanel>
                 <ResizableHandle  disabled/>
-                <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+                <ResizablePanel defaultSize={85} minSize={30}>
                     <ChatMain chatList={chatMessageList} />
                 </ResizablePanel>
             </ResizablePanelGroup>

@@ -1,3 +1,5 @@
+import {Companies} from "./odoo/odoo-common";
+
 export type UserInfo = {
     uid: number;
     is_system: boolean;
@@ -39,13 +41,7 @@ export type UserInfo = {
     };
     user_companies: {
         current_company: number;
-        allowed_companies: {
-            [key: string]: {
-                id: number;
-                name: string;
-                sequence: number;
-            };
-        };
+        allowed_companies: Companies;
     };
     show_effect: boolean;
     display_switch_company_menu: boolean;

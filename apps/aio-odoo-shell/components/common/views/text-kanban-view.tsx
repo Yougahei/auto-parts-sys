@@ -131,7 +131,7 @@ function TextKanbanView({
                                                 onClick ? onClick(data) : null
                                             }
                                         >
-                                            <Card className="p-4 h-72 flex flex-col">
+                                            <Card className="p-4 h-auto flex flex-col">
                                                 <CardHeader>
                                                     <div>
                                                         <div className="flex flex-row justify-between items-center mb-2">
@@ -194,7 +194,7 @@ function TextKanbanView({
                                                 <DropdownMenuItem
                                                     onClick={() =>
                                                         router.push(
-                                                            `${editLink}/${data.id}`
+                                                            `${editLink}?id=${data.id}`
                                                         )
                                                     }
                                                 >

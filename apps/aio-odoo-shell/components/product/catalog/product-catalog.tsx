@@ -3,34 +3,32 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+
+
 import { getProductAliases, getProductCategories, getProductComponents } from "../../../actions/odoo-action";
+import { catalogDemo } from "../../../demo-data/catalog-demo";
 import { BaseInfo } from "../../../types/odooStoreType";
 import TextKanbanView from "../../common/views/text-kanban-view";
+import EditTree from "../../tree/edit-tree";
+import ProductTeable from "./product-teable";
 
 
 function ProductCatalog() {
-    let infoBase: BaseInfo = {} as BaseInfo;
-    const router = useRouter();
     const [loading, setLoading] = React.useState(true);
-    const [dataList, setDataList] = React.useState<any[]>([]);
-    const [aliases, setAliases] = React.useState<any[]>([]);
-    const [components, setComponents] = React.useState<any[]>([]);
+    const [productList, setProductList] = React.useState<string[]>([]);
 
     async function initData() {
-        const categories = await getProductCategories(infoBase.token);
-        const aliases = await getProductAliases(infoBase.token);
-        const components = await getProductComponents(infoBase.token);
-
-        setAliases(aliases.result);
-        setDataList(categories.result);
-        setComponents(components.result);
         setLoading(false);
+    }
+
+    function itemClick(item: any) {
+        console.log(item);
+        setProductList(item.product_list)
     }
 
     useEffect(() => {
         const storedBaseInfo = window.sessionStorage.getItem("baseInfo");
         const info: BaseInfo = JSON.parse(storedBaseInfo ?? "{}");
-        infoBase = info;
         initData();
     }, []);
 
@@ -38,33 +36,29 @@ function ProductCatalog() {
         return <div>loading...</div>;
     }
 
-    function content(data: any) {
-        // console.log(data)
-        const productAliasIdsSet = new Set(data.product_alias_ids);
-        const componentIdsSet = new Set(data.product_component_ids);
-
-        return (
-            <div>
-                {data.product_alias_ids.length > 0 ? <div>别名：</div>: null}
-                {aliases.filter(alias => productAliasIdsSet.has(alias.id)).map((alias) => (
-                    <div key={alias.id}>
-                        {alias.name} - {alias.product_alias}
-                    </div>
-                ))}
-                {data.product_component_ids.length > 0 ? <div>组件：</div>: null}
-                {components.filter(component => componentIdsSet.has(component.id)).map((component) => (
-                    <div key={component.id}>
-                        {component.name} - {component.component_code}
-                    </div>
-                ))}
-            </div>
-        );
-    }
 
     return (
-        <div><TextKanbanView initDataList={dataList} onClick={(data) => {
-            router.push(`/product/catalog/${data.id}`);
-        }} description={"reference_code"} content={content} /></div>
+        <div className="flex flex-row space-x-2">
+            <div className="w-1/4">
+                <EditTree
+                    treeData={catalogDemo}
+                    // create={false}
+                    operation={{
+                        move: true,
+                        rename: true,
+                        delete: true,
+                        create: true,
+                        showIcon: false,
+                        canDrag: true,
+                    }}
+                    itemClick={itemClick}
+                />
+                <div>{JSON.stringify(productList)}</div>
+            </div>
+            <div className="w-3/4">
+                <ProductTeable />
+            </div>
+        </div>
     );
 }
 

@@ -64,6 +64,26 @@ export function MainNav() {
                 >
                     GitHub
                 </Link>
+                <Link href="/article"
+                      className={cn(
+                          "transition-colors hover:text-foreground/80",
+                          pathname === "/article"
+                              ? "text-foreground"
+                              : "text-foreground/60"
+                      )}
+                >
+                    文章
+                </Link>
+                <Link href="/chat"
+                             className={cn(
+                                 "transition-colors hover:text-foreground/80",
+                                 pathname === "/chat"
+                                     ? "text-foreground"
+                                     : "text-foreground/60"
+                             )}
+            >
+                问答
+            </Link>
             </nav>
         </div>
     );

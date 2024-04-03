@@ -132,13 +132,18 @@ export async function callKw(payload: Payload) {
 }
 
 export async function getDatabaseList() {
-    const response = await jsonRpc(`/web/database/list`, {
-        jsonrpc: "2.0",
-        method: "call",
-        params: {},
-        id: randomId(),
-    });
-    return await response.json();
+    try {
+        const response = await jsonRpc(`/web/database/list`, {
+            jsonrpc: "2.0",
+            method: "call",
+            params: {},
+            id: randomId(),
+        });
+        return await response.json();
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
 }
 
 export async function getProductList(token: string) {
@@ -146,7 +151,7 @@ export async function getProductList(token: string) {
     const rpcData: RpcData = {
         jsonrpc: "2.0",
         params: {
-            model: "product.template",
+            model: "pim.product",
             method: "search_read",
             token: token,
             args: [],
@@ -154,16 +159,12 @@ export async function getProductList(token: string) {
         id: randomId(),
     };
 
-    const response = await jsonRpc(
-        `/json-call`,
-        rpcData,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                Cookie: `session_id=${sessionId?.value}`,
-            },
-        }
-    );
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
     return await response.json();
 }
 
@@ -180,16 +181,12 @@ export async function getProductCategories(token: string, domain: any[] = []) {
         id: randomId(),
     };
 
-    const response = await jsonRpc(
-        `/json-call`,
-        rpcData,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                Cookie: `session_id=${sessionId?.value}`,
-            },
-        }
-    );
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
     return await response.json();
 }
 
@@ -206,16 +203,12 @@ export async function getProductAliases(token: string) {
         id: randomId(),
     };
 
-    const response = await jsonRpc(
-        `/json-call`,
-        rpcData,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                Cookie: `session_id=${sessionId?.value}`,
-            },
-        }
-    );
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
     return await response.json();
 }
 
@@ -232,16 +225,12 @@ export async function getProductComponents(token: string) {
         id: randomId(),
     };
 
-    const response = await jsonRpc(
-        `/json-call`,
-        rpcData,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                Cookie: `session_id=${sessionId?.value}`,
-            },
-        }
-    );
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
     return await response.json();
 }
 
@@ -258,15 +247,146 @@ export async function getCopyWriting(token: string) {
         id: randomId(),
     };
 
-    const response = await jsonRpc(
-        `/json-call`,
-        rpcData,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                Cookie: `session_id=${sessionId?.value}`,
-            },
-        }
-    );
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
+    return await response.json();
+}
+
+export async function getPimAttribute(token: string) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.attribute",
+            method: "search_read",
+            token: token,
+            args: [],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
+    return await response.json();
+}
+
+export async function getPimAttributeGroup(token: string) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.attribute_group",
+            method: "search_read",
+            token: token,
+            args: [],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
+    return await response.json();
+}
+
+export async function getPimAttributeTab(token: string) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.attribute_tab",
+            method: "search_read",
+            token: token,
+            args: [],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
+    return await response.json();
+}
+
+export async function createPimAttribute(token: string, data: any) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.attribute",
+            method: "create",
+            token: token,
+            args: [data],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
+    return await response.json();
+}
+
+export async function getPimCatalog(token: string, domain: any[] = [], fields: string[] = []) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.catalog",
+            method: "search_read",
+            token: token,
+            args: [domain, fields],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
+    return await response.json();
+}
+
+export async function savePimCatalogTree(
+    token: string,
+    data: { id: number; tree: any }
+) {
+    const sessionId = await getCookie("session_id");
+    const rpcData: RpcData = {
+        jsonrpc: "2.0",
+        params: {
+            model: "pim.catalog",
+            method: "write",
+            token: token,
+            args: [[data.id], { data: JSON.stringify(data.tree) }],
+        },
+        id: randomId(),
+    };
+
+    const response = await jsonRpc(`/json-call`, rpcData, {
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionId?.value}`,
+        },
+    });
     return await response.json();
 }

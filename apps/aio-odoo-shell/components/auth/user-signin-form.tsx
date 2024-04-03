@@ -26,6 +26,7 @@ import { cn } from "@ui/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@ui/components/ui/popover";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@ui/components/ui/command";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@ui/components/ui/select";
 
 export default function UserSignInForm() {
     const [dbList, setDbList] = useState<any[]>([]);
@@ -42,9 +43,23 @@ export default function UserSignInForm() {
 
     useEffect(() => {
         getDatabaseList().then((res) => {
-            setDbList(res.result.map((item: string) => ({ label: item, value: item })));
+            if(res){
+                setDbList(res.result.map((item: string) => ({ label: item, value: item })));
+            }else{
+                setDbList([]);
+            }
         });
     }, []);
+
+    useEffect(() => {
+        if(dbList.length === 0){
+            toast({
+                title: "呀没找到数据库？",
+                description: "请检查当前网络连接, 或者联系管理员",
+                variant: "destructive",
+            })
+        }
+    }, [dbList]);
 
     const setUserInfos = userStore((state: any) => state.setUserInfos);
     const setBaseInfo = userStore((state: any) => state.setBaseInfo);
@@ -110,57 +125,21 @@ export default function UserSignInForm() {
                         render={({ field }) => (
                             <FormItem className="flex flex-col mt-3">
                                 <FormLabel>数据库</FormLabel>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant="outline"
-                                                role="combobox"
-                                                className={cn(
-                                                    "w-full justify-between",
-                                                    !field.value && "text-muted-foreground"
-                                                )}
-                                            >
-                                                {field.value
-                                                    ? dbList.find(
-                                                        (db) => db.value === field.value
-                                                    )?.label
-                                                    : "选择数据库..."}
-                                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-[340px] p-0">
-                                        <Command>
-                                            <CommandInput
-                                                placeholder="搜索数据库..."
-                                                className="h-9"
-                                            />
-                                            <CommandEmpty>No framework found.</CommandEmpty>
-                                            <CommandGroup>
-                                                {dbList.map((db) => (
-                                                    <CommandItem
-                                                        value={db.label}
-                                                        key={db.value}
-                                                        onSelect={() => {
-                                                            form.setValue("db", db.value)
-                                                        }}
-                                                    >
-                                                        {db.label}
-                                                        <CheckIcon
-                                                            className={cn(
-                                                                "ml-auto h-4 w-4",
-                                                                db.value === field.value
-                                                                    ? "opacity-100"
-                                                                    : "opacity-0"
-                                                            )}
-                                                        />
-                                                    </CommandItem>
-                                                ))}
-                                            </CommandGroup>
-                                        </Command>
-                                    </PopoverContent>
-                                </Popover>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a DataBase ..." />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {dbList.map((item) => (
+                                            <SelectItem key={item.value} value={item.value}>
+                                                {item.value}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+
                                 <FormMessage />
                             </FormItem>
                         )}

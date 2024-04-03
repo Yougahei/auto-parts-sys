@@ -1,23 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
+import { usePathname, useRouter } from "next/navigation";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@repo/ui/components/ui/avatar";
 import { Button } from "@repo/ui/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "@repo/ui/components/ui/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuTrigger,
+} from "@repo/ui/components/ui/dropdown-menu";
 import { Skeleton } from "@repo/ui/components/ui/skeleton";
-
-
 
 import { logoutOdoo } from "../../actions/odoo-action";
 import { getImage } from "../../api/odoo/odoo-api";
 import { userStore } from "../../stores/userInfo";
 import { BaseInfo } from "../../types/odooStoreType";
-import request from "../../utils/request";
-
 
 export function UserAccount() {
-    const { userInfo, baseInfo,  hydrate } = userStore((state) => state);
+    const pathname = usePathname();
+    const { userInfo, baseInfo, hydrate } = userStore((state) => state);
     const [loading, setLoading] = useState(true);
     const [imgUrl, setImgUrl] = useState<string>();
 
@@ -32,9 +42,12 @@ export function UserAccount() {
             id: infoBase.partner_id,
             unique: 1709956427000,
         });
-
-        const url = URL.createObjectURL(response);
-        setImgUrl(url);
+        if (response === false) {
+            setImgUrl(undefined);
+        } else {
+            const url = URL.createObjectURL(response);
+            setImgUrl(url);
+        }
     }
 
     // 在页面加载时从SessionStorage中加载数据
@@ -45,7 +58,10 @@ export function UserAccount() {
             await initUserAvartar();
             setLoading(false);
         }
-        fetchData();
+
+        if (pathname !== "/auth") {
+            fetchData();
+        }
     }, []);
 
     if (loading) {
@@ -61,8 +77,8 @@ export function UserAccount() {
                         className="relative h-8 w-8 rounded-full"
                     >
                         <Avatar className="h-8 w-8">
-                            <AvatarImage src={imgUrl} alt="@shadcn" />
-                            <AvatarFallback>{userInfo.username}</AvatarFallback>
+                            <AvatarImage src={imgUrl} alt="@avatar" />
+                            <AvatarFallback>{userInfo.name}</AvatarFallback>
                         </Avatar>
                     </Button>
                 </DropdownMenuTrigger>
